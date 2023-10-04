@@ -51,6 +51,4 @@ goto end
 :: restore caller current directory
 popd
 
-pause
-
 exit /b %ERROR_CODE%
