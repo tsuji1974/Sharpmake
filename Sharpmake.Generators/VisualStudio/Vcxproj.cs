@@ -144,7 +144,13 @@ namespace Sharpmake.Generators.VisualStudio
             GenerateImpl(context, generatedFiles, skipFiles);
         }
 
-        public static string FastBuildCustomArguments = "";
+        [Obsolete("Deprecated. Use `FastBuildSettings.FastBuildCustomArguments` instead.", error: false)]
+        public static string FastBuildCustomArguments
+        {
+            get { return FastBuildSettings.FastBuildCustomArguments; }
+            set { FastBuildSettings.FastBuildCustomArguments = value; }
+        }
+
         public const string ProjectExtension = ".vcxproj";
         private const string ProjectFilterExtension = ".filters";
         private const string CopyDependenciesExtension = "_runtimedependencies.txt";
@@ -558,8 +564,8 @@ namespace Sharpmake.Generators.VisualStudio
                             if (!string.IsNullOrEmpty(conf.FastBuildCustomArgs))
                                 fastBuildCommandLineOptions.Add(conf.FastBuildCustomArgs);
 
-                            if (!string.IsNullOrEmpty(FastBuildCustomArguments))
-                                fastBuildCommandLineOptions.Add(FastBuildCustomArguments);
+                            if (!string.IsNullOrEmpty(FastBuildSettings.FastBuildCustomArguments))
+                                fastBuildCommandLineOptions.Add(FastBuildSettings.FastBuildCustomArguments);
 
                             string commandLine = string.Join(" ", fastBuildCommandLineOptions);
 
@@ -583,6 +589,8 @@ namespace Sharpmake.Generators.VisualStudio
                         {
                             platformVcxproj.GenerateProjectConfigurationGeneral2(context, fileGenerator);
                         }
+
+                        VsProjCommon.WriteConfigurationsCustomProperties(conf, fileGenerator);
                     }
                 }
             }

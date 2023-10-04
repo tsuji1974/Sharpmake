@@ -790,6 +790,16 @@ namespace Sharpmake
             public Strings SourceFilesCompileAsCPPRegex = new Strings();
 
             /// <summary>
+            /// Source files that match this regex will be compiled as ObjC Files.
+            /// </summary>
+            public Strings SourceFilesCompileAsObjCRegex = new Strings();
+
+            /// <summary>
+            /// Source files that match this regex will be compiled as ObjCPP Files.
+            /// </summary>
+            public Strings SourceFilesCompileAsObjCPPRegex = new Strings();
+
+            /// <summary>
             /// Source files that match this regex will be compiled as CLR Files.
             /// </summary>
             public Strings SourceFilesCompileAsCLRRegex = new Strings();
@@ -2348,6 +2358,10 @@ namespace Sharpmake
                 set { }
             }
 
+            /// <summary>
+            /// Mark the configuration to be the default build configuration for XCode project
+            /// </summary>
+            public bool UseAsDefaultForXCode = false;
 
             // FastBuild configuration
             /// <summary>
@@ -2569,6 +2583,8 @@ namespace Sharpmake
 
             public Strings ResolvedSourceFilesWithCompileAsCOption = new Strings();
             public Strings ResolvedSourceFilesWithCompileAsCPPOption = new Strings();
+            public Strings ResolvedSourceFilesWithCompileAsObjCOption = new Strings();
+            public Strings ResolvedSourceFilesWithCompileAsObjCPPOption = new Strings();
             public Strings ResolvedSourceFilesWithCompileAsCLROption = new Strings();
             public Strings ResolvedSourceFilesWithCompileAsNonCLROption = new Strings();
             public Strings ResolvedSourceFilesWithCompileAsWinRTOption = new Strings();
@@ -3096,6 +3112,10 @@ namespace Sharpmake
             public Strings ForceUsingFiles = new Strings();
 
             public Strings CustomPropsFiles = new Strings();  // vs2010+ .props files
+            /// <summary>
+            /// CustomProperties for configuration level. Supported only in msbuild based targets(C++/C#)
+            /// </summary>
+            public Dictionary<string, string> CustomProperties = new Dictionary<string, string>();
             public Strings CustomTargetsFiles = new Strings();  // vs2010+ .targets files
 
             // NuGet packages (C# and visual studio c++ for now)

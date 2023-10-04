@@ -233,6 +233,7 @@ namespace Sharpmake
                     Disable
                 }
 
+                [Obsolete("Deprecated. Use `CppExceptions`, `ObjCExceptions`, or `ObjCARCExceptions` instead.", error: false)]
                 public enum Exceptions
                 {
                     [Default]
@@ -240,6 +241,27 @@ namespace Sharpmake
                     Enable,
                     EnableCpp,
                     EnableObjC,
+                }
+
+                public enum CppExceptions
+                {
+                    [Default]
+                    Disable,
+                    Enable
+                }
+
+                public enum ObjCExceptions
+                {
+                    [Default]
+                    Disable,
+                    Enable
+                }
+
+                public enum ObjCARCExceptions
+                {
+                    [Default]
+                    Disable,
+                    Enable
                 }
 
                 public class ExternalResourceFolders : Strings
@@ -1126,6 +1148,18 @@ namespace Sharpmake
                     Enable,
                     Disable
                 }              
+
+                /// <summary>
+                /// Resolve to <CommandLineArguments> in xcscheme, 
+                ///  for configuring 'Arguments Passed On Launch' as 'Edit Scheme' in XCode can do
+                /// </summary>
+                public class DebugArguments: List<string>
+                {
+                    public DebugArguments(List<string> args)
+                        : base(args) 
+                    {
+                    }
+                }
             }
         }
     }

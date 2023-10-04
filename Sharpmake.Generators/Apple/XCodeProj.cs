@@ -270,6 +270,20 @@ namespace Sharpmake.Generators.Apple
                 }
             }
 
+            // Build commandLineArguments
+            var debugArguments = Options.GetObject<Options.XCode.Scheme.DebugArguments>(configurations[0]);
+            var commandLineArguments = new StringBuilder();
+            if (debugArguments != null)
+            {
+                commandLineArguments.Append(Template.CommandLineArgumentsBegin);
+                foreach(var argument in debugArguments)
+                {
+                    using (fileGenerator.Declare("argument", argument))
+                    commandLineArguments.Append(fileGenerator.Resolver.Resolve(Template.CommandLineArgument));
+                }
+                commandLineArguments.Append(Template.CommandLineArgumentsEnd);
+            }
+
             // Write the scheme file
             var defaultTarget = _nativeOrLegacyTargets.Values.Where(target => target.OutputFile.OutputType != Project.Configuration.OutputType.IosTestBundle).FirstOrDefault();
 
@@ -287,11 +301,16 @@ namespace Sharpmake.Generators.Apple
                 Options.Option(Options.XCode.Scheme.MetalAPIValidation.Disable, () => options["MetalAPIValidation"] = "1")
             );
 
+            var defaultConfiguration = configurations.Where(conf => conf.UseAsDefaultForXCode == true).FirstOrDefault();
+            Project.Configuration activeConfiguration = defaultConfiguration != null ? defaultConfiguration : configurations[0];
+            string targetName = $"&quot;{activeConfiguration.Target.Name}&quot;";
+
             using (fileGenerator.Declare("projectFile", projectFile))
             using (fileGenerator.Declare("item", defaultTarget))
             using (fileGenerator.Declare("options", options))
             using (fileGenerator.Declare("testableElements", testableElements))
-            using (fileGenerator.Declare("optimization", configurations[0].Target.Name))
+            using (fileGenerator.Declare("DefaultTarget", targetName))
+            using (fileGenerator.Declare("commandLineArguments", commandLineArguments))
             {
                 fileGenerator.Write(Template.SchemeFileTemplate);
             }
@@ -1434,7 +1453,7 @@ namespace Sharpmake.Generators.Apple
             }
         }
 
-        private abstract class ProjectFileSystemItem : ProjectItem
+        internal abstract class ProjectFileSystemItem : ProjectItem
         {
             public enum SourceTreeSetting
             {
@@ -1481,7 +1500,7 @@ namespace Sharpmake.Generators.Apple
             public abstract SourceTreeSetting SourceTreeValue { get; }
         }
 
-        private abstract class ProjectFileBase : ProjectFileSystemItem
+        internal abstract class ProjectFileBase : ProjectFileSystemItem
         {
             private bool _build = false;
             private bool _source = false;
@@ -1602,7 +1621,7 @@ namespace Sharpmake.Generators.Apple
             public string IncludeInIndex { get { return _includeInIndex; } }
         }
 
-        private class ProjectFile : ProjectFileBase
+        internal class ProjectFile : ProjectFileBase
         {
             public ProjectFile(ItemSection section, string fullPath)
                 : base(section, fullPath)
@@ -1826,10 +1845,10 @@ namespace Sharpmake.Generators.Apple
             public override string Path { get { return RemoveLineTag; } }
         }
 
-        private class ProjectBuildFile : ProjectItem
+        internal class ProjectBuildFile : ProjectItem
         {
             public ProjectBuildFile(ProjectFileBase file, string settings = @"")
-                : base(ItemSection.PBXBuildFile, file.Name, settings)
+                : base(ItemSection.PBXBuildFile, file.FullPath, settings)
             {
                 File = file;
             }
@@ -2259,6 +2278,12 @@ namespace Sharpmake.Generators.Apple
 
                     if (FastBuildSettings.FastBuildNoUnity)
                         fastBuildCommandLineOptions.Add("-nounity");
+
+                    if (FastBuildSettings.FastBuildDistribution)
+                        fastBuildCommandLineOptions.Add("-dist");
+
+                    if (!string.IsNullOrEmpty(FastBuildSettings.FastBuildCustomArguments))
+                        fastBuildCommandLineOptions.Add(FastBuildSettings.FastBuildCustomArguments);
 
                     fastBuildCommandLineOptions.Add("-config " + Path.GetFileName(_masterBffFilePath));
 

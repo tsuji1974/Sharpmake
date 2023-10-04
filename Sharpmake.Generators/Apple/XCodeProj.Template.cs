@@ -280,6 +280,7 @@ namespace Sharpmake.Generators.Apple
 				GCC_ENABLE_CPP_EXCEPTIONS = [item.Options.CppExceptionHandling];
 				GCC_ENABLE_CPP_RTTI = [item.Options.RuntimeTypeInfo];
 				GCC_ENABLE_OBJC_EXCEPTIONS = [item.Options.ObjCExceptionHandling];
+				CLANG_ENABLE_OBJC_ARC_EXCEPTIONS = [item.Options.ObjCARCExceptionHandling];
 				GCC_GENERATE_DEBUGGING_SYMBOLS = [item.Options.GenerateDebuggingSymbols];
 				GCC_INLINES_ARE_PRIVATE_EXTERN = [item.Options.PrivateInlines];
 				GCC_MODEL_TUNING = [item.Options.ModelTuning];
@@ -480,6 +481,21 @@ namespace Sharpmake.Generators.Apple
 "               }
             };
 
+            public static string CommandLineArgumentsBegin =
+@"
+      <CommandLineArguments>";
+
+            public static string CommandLineArgument =
+@"
+         <CommandLineArgument
+            argument = ""[argument]""
+            isEnabled = ""YES"">
+         </CommandLineArgument>";
+
+            public static string CommandLineArgumentsEnd =
+@"
+      </CommandLineArguments>";
+
             public static string SchemeTestableReference =
 @"
          <TestableReference
@@ -519,7 +535,7 @@ namespace Sharpmake.Generators.Apple
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = ""[optimization]""
+      buildConfiguration = ""[DefaultTarget]""
       selectedDebuggerIdentifier = ""Xcode.DebuggerFoundation.Debugger.LLDB""
       selectedLauncherIdentifier = ""Xcode.DebuggerFoundation.Launcher.LLDB""
       shouldUseLaunchSchemeArgsEnv = ""YES"">
@@ -527,7 +543,7 @@ namespace Sharpmake.Generators.Apple
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = ""[optimization]""
+      buildConfiguration = ""[DefaultTarget]""
       selectedDebuggerIdentifier = ""Xcode.DebuggerFoundation.Debugger.LLDB""
       selectedLauncherIdentifier = ""Xcode.DebuggerFoundation.Launcher.LLDB""
       launchStyle = ""0""
@@ -545,22 +561,22 @@ namespace Sharpmake.Generators.Apple
               BlueprintName = ""[item.Identifier]""
               ReferencedContainer = ""container:[projectFile].xcodeproj"">
           </BuildableReference>
-      </BuildableProductRunnable>
+      </BuildableProductRunnable>[commandLineArguments]
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = ""[optimization]""
+      buildConfiguration = ""[DefaultTarget]""
       shouldUseLaunchSchemeArgsEnv = ""YES""
       savedToolIdentifier = """"
       useCustomWorkingDirectory = ""NO""
       debugDocumentVersioning = ""YES"">
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = ""[optimization]"">
+      buildConfiguration = ""[DefaultTarget]"">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = ""[optimization]""
+      buildConfiguration = ""[DefaultTarget]""
       revealArchiveInOrganizer = ""YES"">
    </ArchiveAction>
 </Scheme>

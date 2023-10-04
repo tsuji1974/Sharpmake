@@ -25,6 +25,7 @@ namespace Sharpmake
                             // Options
                             //--------
                             + ' [cmdLineOptions.GenerateMapFile]'
+                            + ' [cmdLineOptions.DeadCodeStripping]'
                             // Additional linker options
                             //--------------------------
                             + ' [options.AdditionalLinkerOptions]'
@@ -41,7 +42,12 @@ namespace Sharpmake
             + ' [cmdLineOptions.SDKRoot]'
             + ' [cmdLineOptions.CppLanguageStd]'
             + ' [cmdLineOptions.CLanguageStd]'
+            + ' [cmdLineOptions.WarningReturnType]'
+            + ' [cmdLineOptions.RuntimeTypeInfo]'
             + ' [cmdLineOptions.ClangEnableObjC_ARC]'
+            + ' [cmdLineOptions.CppExceptions]'
+            + ' [cmdLineOptions.ObjCExceptions]'
+            + ' [cmdLineOptions.ObjCARCExceptions]'
 ";
 
         private const string _compilerExtraOptionsAdditional = @"

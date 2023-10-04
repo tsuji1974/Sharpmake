@@ -657,11 +657,33 @@ namespace Sharpmake
                 Options.Option(Options.XCode.Compiler.EnableBitcode.Enable, () => { options["EnableBitcode"] = "YES"; })
             );
 
+#pragma warning disable 618  // obsolete warning
+            bool hasOldExceptionOption = Sharpmake.Options.HasOption<Options.XCode.Compiler.Exceptions>(conf);
+            if (hasOldExceptionOption)
+            {
+                // Convert options - Temporary measure
+                context.SelectOption(
+                    Options.Option(Options.XCode.Compiler.Exceptions.Disable, () => { conf.Options.Add(Options.XCode.Compiler.CppExceptions.Disable); conf.Options.Add(Options.XCode.Compiler.ObjCExceptions.Disable); }),
+                    Options.Option(Options.XCode.Compiler.Exceptions.Enable, () => { conf.Options.Add(Options.XCode.Compiler.CppExceptions.Enable); conf.Options.Add(Options.XCode.Compiler.ObjCExceptions.Enable); }),
+                    Options.Option(Options.XCode.Compiler.Exceptions.EnableCpp, () => { conf.Options.Add(Options.XCode.Compiler.CppExceptions.Enable); conf.Options.Add(Options.XCode.Compiler.ObjCExceptions.Disable); }),
+                    Options.Option(Options.XCode.Compiler.Exceptions.EnableObjC, () => { conf.Options.Add(Options.XCode.Compiler.CppExceptions.Disable); conf.Options.Add(Options.XCode.Compiler.ObjCExceptions.Enable); })
+                );
+            }
+#pragma warning restore 618
+
             context.SelectOption(
-                Options.Option(Options.XCode.Compiler.Exceptions.Disable, () => { options["CppExceptionHandling"] = "NO"; options["ObjCExceptionHandling"] = "NO"; }),
-                Options.Option(Options.XCode.Compiler.Exceptions.Enable, () => { options["CppExceptionHandling"] = "YES"; options["ObjCExceptionHandling"] = "YES"; }),
-                Options.Option(Options.XCode.Compiler.Exceptions.EnableCpp, () => { options["CppExceptionHandling"] = "YES"; options["ObjCExceptionHandling"] = "NO"; }),
-                Options.Option(Options.XCode.Compiler.Exceptions.EnableObjC, () => { options["CppExceptionHandling"] = "NO"; options["ObjCExceptionHandling"] = "YES"; })
+                Options.Option(Options.XCode.Compiler.CppExceptions.Disable, () => { options["CppExceptionHandling"] = "NO"; cmdLineOptions["CppExceptions"] = FileGeneratorUtilities.RemoveLineTag; }),
+                Options.Option(Options.XCode.Compiler.CppExceptions.Enable, () => { options["CppExceptionHandling"] = "YES"; cmdLineOptions["CppExceptions"] = "-fcxx-exceptions"; })
+            );
+
+            context.SelectOption(
+                Options.Option(Options.XCode.Compiler.ObjCExceptions.Disable, () => { options["ObjCExceptionHandling"] = "NO"; cmdLineOptions["ObjCExceptions"] = FileGeneratorUtilities.RemoveLineTag; }),
+                Options.Option(Options.XCode.Compiler.ObjCExceptions.Enable, () => { options["ObjCExceptionHandling"] = "YES"; cmdLineOptions["ObjCExceptions"] = "-fobjc-exceptions"; })
+            );
+
+            context.SelectOption(
+                Options.Option(Options.XCode.Compiler.ObjCARCExceptions.Disable, () => { options["ObjCARCExceptionHandling"] = "NO"; cmdLineOptions["ObjCARCExceptions"] = FileGeneratorUtilities.RemoveLineTag; }),
+                Options.Option(Options.XCode.Compiler.ObjCARCExceptions.Enable, () => { options["ObjCARCExceptionHandling"] = "YES"; cmdLineOptions["ObjCARCExceptions"] = "-fobjc-arc-exceptions"; })
             );
 
             context.SelectOption(
@@ -705,10 +727,10 @@ namespace Sharpmake
             );
 
             context.SelectOption(
-                Options.Option(Options.XCode.Compiler.DeadStrip.Disable, () => { options["DeadStripping"] = "NO"; options["PrivateInlines"] = "NO"; }),
-                Options.Option(Options.XCode.Compiler.DeadStrip.Code, () => { options["DeadStripping"] = "YES"; options["PrivateInlines"] = "NO"; }),
-                Options.Option(Options.XCode.Compiler.DeadStrip.Inline, () => { options["DeadStripping"] = "NO"; options["PrivateInlines"] = "YES"; }),
-                Options.Option(Options.XCode.Compiler.DeadStrip.All, () => { options["DeadStripping"] = "YES"; options["PrivateInlines"] = "YES"; })
+                Options.Option(Options.XCode.Compiler.DeadStrip.Disable, () => { options["DeadStripping"] = "NO"; options["PrivateInlines"] = "NO"; cmdLineOptions["DeadCodeStripping"] = FileGeneratorUtilities.RemoveLineTag; }),
+                Options.Option(Options.XCode.Compiler.DeadStrip.Code, () => { options["DeadStripping"] = "YES"; options["PrivateInlines"] = "NO"; cmdLineOptions["DeadCodeStripping"] = "-dead_strip"; }),
+                Options.Option(Options.XCode.Compiler.DeadStrip.Inline, () => { options["DeadStripping"] = "NO"; options["PrivateInlines"] = "YES"; cmdLineOptions["DeadCodeStripping"] = "-fvisibility-inlines-hidden"; }),
+                Options.Option(Options.XCode.Compiler.DeadStrip.All, () => { options["DeadStripping"] = "YES"; options["PrivateInlines"] = "YES"; cmdLineOptions["DeadCodeStripping"] = "-dead_strip -fvisibility-inlines-hidden"; })
                 );
 
 
@@ -723,8 +745,8 @@ namespace Sharpmake
             );
 
             context.SelectOption(
-                Options.Option(Options.XCode.Compiler.RTTI.Disable, () => { options["RuntimeTypeInfo"] = "NO"; }),
-                Options.Option(Options.XCode.Compiler.RTTI.Enable, () => { options["RuntimeTypeInfo"] = "YES"; })
+                Options.Option(Options.XCode.Compiler.RTTI.Disable, () => { options["RuntimeTypeInfo"] = "NO"; cmdLineOptions["RuntimeTypeInfo"] = "-fno-rtti"; }),
+                Options.Option(Options.XCode.Compiler.RTTI.Enable, () => { options["RuntimeTypeInfo"] = "YES"; cmdLineOptions["RuntimeTypeInfo"] = "-frtti"; })
             );
 
             context.SelectOption(
@@ -904,8 +926,8 @@ namespace Sharpmake
             );
 
             context.SelectOption(
-                Options.Option(Options.XCode.Compiler.WarningReturnType.Disable, () => options["WarningReturnType"] = "NO"),
-                Options.Option(Options.XCode.Compiler.WarningReturnType.Enable, () => options["WarningReturnType"] = "YES")
+                Options.Option(Options.XCode.Compiler.WarningReturnType.Disable, () => { options["WarningReturnType"] = "NO"; cmdLineOptions["WarningReturnType"] = "-Wno-return-type"; }),
+                Options.Option(Options.XCode.Compiler.WarningReturnType.Enable, () => { options["WarningReturnType"] = "YES"; cmdLineOptions["WarningReturnType"] = "-Wreturn-type"; })
             );
 
             context.SelectOption(
@@ -1279,11 +1301,12 @@ namespace Sharpmake
         }
 
         // TODO: Refactor this.
-        public void SetupPlatformLibraryOptions(ref string platformLibExtension, ref string platformOutputLibExtension, ref string platformPrefixExtension)
+        public void SetupPlatformLibraryOptions(out string platformLibExtension, out  string platformOutputLibExtension, out string platformPrefixExtension, out string platformLibPrefix)
         {
             platformLibExtension = ".a";
-            platformOutputLibExtension = ".a";
+            platformOutputLibExtension = "";
             platformPrefixExtension = string.Empty;
+            platformLibPrefix = "";
         }
 
         private IEnumerable<string> GetIncludePathsImpl(IGenerationContext context)
