@@ -15,14 +15,14 @@ if %errorlevel% NEQ 0 goto error
 @REM -----------------------------------------------------------------------
 :success
 COLOR 2F
-echo Copy yo bin succeeded^!
+echo Copy to bin succeeded^!
 set ERROR_CODE=0
 goto end
 
 @REM -----------------------------------------------------------------------
 :error
 COLOR 4F
-echo Copy yo bin failed^!
+echo Copy to bin failed^!
 set ERROR_CODE=1
 goto end
 
