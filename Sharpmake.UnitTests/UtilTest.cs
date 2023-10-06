@@ -55,8 +55,7 @@ namespace Sharpmake.UnitTests
             string expectedResult = "$(Console_SdkPackagesRoot)";
             if (!Util.IsRunningInMono())
                 expectedResult = expectedResult.ToLower();
-            // Tsuji - Skip this test
-            //Assert.That(Util.PathMakeStandard("$(Console_SdkPackagesRoot)"), Is.EqualTo(expectedResult));
+            Assert.That(Util.PathMakeStandard("$(Console_SdkPackagesRoot)"), Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -65,8 +64,7 @@ namespace Sharpmake.UnitTests
             string expectedResult = Path.Combine("rd", "project", "dev", "projects", "sharpmake", "..", "..", "extern", "Geometrics");
             if (!Util.IsRunningInMono())
                 expectedResult = expectedResult.ToLower();
-            // Tsuji - Skip this test
-            //Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Geometrics\"), Is.EqualTo(expectedResult));
+            Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Geometrics\"), Is.EqualTo(expectedResult));
         }
 
         [Test]
@@ -76,18 +74,16 @@ namespace Sharpmake.UnitTests
             if (!Util.IsRunningInMono())
                 expectedResult = expectedResult.ToLower();
 
-            // Tsuji - Skip this test
-            //Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Microsoft.CNG\Lib\"), Is.EqualTo(expectedResult));
+            Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Microsoft.CNG\Lib\"), Is.EqualTo(expectedResult));
         }
 
         [Test]
         public void ProcessesPathWithMultipleTrailingBackslashes()
         {
-            // Tsuji - Skip this test
-            //var expectedResult = Path.Combine("rd", "project", "dev", "projects", "sharpmake", "..", "..", "extern", "Microsoft.CNG", "Lib");
-            //if (!Util.IsRunningInMono())
-            //    expectedResult = expectedResult.ToLower();
-            //Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Microsoft.CNG\Lib\\\"), Is.EqualTo(expectedResult));
+            var expectedResult = Path.Combine("rd", "project", "dev", "projects", "sharpmake", "..", "..", "extern", "Microsoft.CNG", "Lib");
+            if (!Util.IsRunningInMono())
+                expectedResult = expectedResult.ToLower();
+            Assert.That(Util.PathMakeStandard(@"rd\project\dev\projects\sharpmake\..\..\extern\Microsoft.CNG\Lib\\\"), Is.EqualTo(expectedResult));
         }
 
         /// <summary>
@@ -109,8 +105,7 @@ namespace Sharpmake.UnitTests
 
             Util.PathMakeStandard(listString);
 
-            // Tsuji - Skip this test
-            //Assert.AreEqual(expectedList, listString);
+            Assert.AreEqual(expectedList, listString);
         }
     }
 
@@ -383,9 +378,8 @@ namespace Sharpmake.UnitTests
             Util.PathMakeStandard(stringsDest);
             OrderableStrings listResult = Util.PathGetRelative(stringsSource, stringsDest, false);
 
-            // Tsuji - Always case sensitive
-            //Assert.AreEqual(Util.PathMakeStandard(@"..\Sharpmake.Generators\Generic", !Util.IsRunningInMono()), listResult[0]);
-            //Assert.AreEqual(Util.PathMakeStandard(@"subdir\test.txt", !Util.IsRunningInMono()), listResult[1]);
+            Assert.AreEqual(Util.PathMakeStandard(@"..\Sharpmake.Generators\Generic", !Util.IsRunningInMono()), listResult[0]);
+            Assert.AreEqual(Util.PathMakeStandard(@"subdir\test.txt", !Util.IsRunningInMono()), listResult[1]);
             Assert.AreEqual(Util.PathMakeStandard(@"..\Sharpmake.Generators\Generic", false), listResult[0]);
             Assert.AreEqual(Util.PathMakeStandard(@"subdir\test.txt", false), listResult[1]);
             Assert.AreEqual("test2.txt", listResult[2]);
@@ -485,7 +479,6 @@ namespace Sharpmake.UnitTests
         [Test]
         public void LongPaths()
         {
-            // Tsuji - Unify the case
             Assert.AreEqual(
                 Util.PathMakeStandard(@"c:\a\b\c\d"),
                 Util.FindCommonRootPath(new[] {
@@ -513,7 +506,6 @@ namespace Sharpmake.UnitTests
             }
             else
             {
-                // Tsuji - We made it always case sensitive
                 Assert.AreEqual(
                     Util.PathMakeStandard(@"c:\a\b\c\d"),
                     Util.FindCommonRootPath(new[] {

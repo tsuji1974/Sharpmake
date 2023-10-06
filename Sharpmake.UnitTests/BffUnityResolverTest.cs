@@ -46,8 +46,7 @@ namespace Sharpmake.UnitTests
                     "SimpleProject_vs2019_Release : SimpleProject_vs2019_Debug_Release_unity", // but different names because of different conf.FastBuildUnityUseRelativePaths from vs2017.
                     "SimpleProject_vs2019_Retail : SimpleProject_vs2019_Retail_unity",
                 };
-            // Tsuji - Skip this test
-            //CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
+            CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
         }
 
         [Test]
@@ -65,8 +64,7 @@ namespace Sharpmake.UnitTests
                     "SimpleProject_vs2019_Release : SimpleProject_unity_A6BA8495", // but different hash values because of different conf.FastBuildUnityUseRelativePaths from vs2017.
                     "SimpleProject_vs2019_Retail : SimpleProject_unity_80CD78B1",
                 };
-            // Tsuji - Skip this test
-            //CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
+            CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
         }
 
         [Test]
@@ -84,8 +82,7 @@ namespace Sharpmake.UnitTests
                     "SimpleProject_vs2019_Release : SimpleProject_unity_32D177F1", // but different hash values because of different conf.FastBuildUnityUseRelativePaths from vs2017.
                     "SimpleProject_vs2019_Retail : SimpleProject_unity_CFC9B4D5",
                 };
-            // Tsuji - Skip this test
-            //CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
+            CollectionAssert.AreEqual(expectedLogNames, unityLogNames);
         }
 
         protected void GenerateAndBuildUsingResolver<T>(DevEnv devEnv) where T : Bff.IUnityResolver, new()
